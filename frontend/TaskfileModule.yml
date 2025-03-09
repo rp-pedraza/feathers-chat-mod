@@ -1,0 +1,90 @@
+version: 3
+
+tasks:
+  pnpm:
+    internal: true
+    preconditions:
+      - sh: which pnpm >/dev/null
+        msg: pnpm must be installed
+      - sh: test -n ${PNPM_HOME}
+        msg: PNPM_HOME environment variable must be set
+
+  prepare:
+    desc: Install node modules
+    deps: [pnpm]
+    sources:
+      - package.json
+      - ../pnpm-lock.yaml
+      - ../pnpm-workspace.yaml
+      - ../.npmrc
+    cmds:
+      - pnpm i
+    generates:
+      - node_modules/@feathersjs/socketio-client/package.json
+      - node_modules/@rp-pedraza/feathers-chat-mod-backend/package.json
+      - node_modules/@rp-pedraza/feathers-chat-mod-backend/tsconfig.json
+      - node_modules/@sinclair/typebox/package.json
+      - node_modules/@tsconfig/node22/package.json
+      - node_modules/@tsconfig/node22/tsconfig.json
+      - node_modules/@types/node/package.json
+      - node_modules/@vitejs/plugin-vue/package.json
+      - node_modules/@vue/eslint-config-prettier/package.json
+      - node_modules/@vue/eslint-config-typescript/package.json
+      - node_modules/@vue/tsconfig/package.json
+      - node_modules/@vue/tsconfig/tsconfig.dom.json
+      - node_modules/@vue/tsconfig/tsconfig.json
+      - node_modules/@vue/tsconfig/tsconfig.lib.json
+      - node_modules/ajv-formats/package.json
+      - node_modules/ajv/package.json
+      - node_modules/bcryptjs/package.json
+      - node_modules/encodeurl/package.json
+      - node_modules/eslint-plugin-vue/package.json
+      - node_modules/eslint/package.json
+      - node_modules/fast-uri/package.json
+      - node_modules/hookable/package.json
+      - node_modules/json-stash/package.json
+      - node_modules/jsonwebtoken/package.json
+      - node_modules/jws/package.json
+      - node_modules/lodash.includes/package.json
+      - node_modules/lodash.isboolean/package.json
+      - node_modules/lodash.isinteger/package.json
+      - node_modules/lodash.isnumber/package.json
+      - node_modules/lodash.isplainobject/package.json
+      - node_modules/lodash.isstring/package.json
+      - node_modules/lodash.once/package.json
+      - node_modules/long-timeout/package.json
+      - node_modules/npm-run-all2/jsdoc.json
+      - node_modules/npm-run-all2/package.json
+      - node_modules/pinia-plugin-persistedstate/package.json
+      - node_modules/pinia/package.json
+      - node_modules/prettier/package.json
+      - node_modules/readable-stream/package.json
+      - node_modules/socket.io-client/package.json
+      - node_modules/typescript/package.json
+      - node_modules/util/package.json
+      - node_modules/uuid/package.json
+      - node_modules/vite-plugin-node-polyfills/package.json
+      - node_modules/vite/package.json
+      - node_modules/vue-router/package.json
+      - node_modules/vue-tsc/package.json
+      - node_modules/vue/package.json
+
+  build:
+    desc: Build dist files
+    deps: [prepare]
+    sources:
+      - src/**/*.ts
+      - src/**/*.vue
+      - ./index.html
+    cmds:
+      - pnpm run build
+    generates:
+      - dist/index.html
+      - dist/assets/*.*
+      - dist/favicon.ico
+
+  serve:
+    desc: Run frontend server
+    deps: [prepare]
+    cmds:
+      - pnpm dev
