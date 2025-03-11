@@ -73,6 +73,10 @@ tasks:
     deps: [prepare]
     cmds:
       - pnpm run compile
+    sources:
+      - src/**/*.ts
+    generates:
+      - lib/**/*.js
 
   serve:
     desc: Run the backend server
