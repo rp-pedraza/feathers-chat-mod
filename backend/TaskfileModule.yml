@@ -14,46 +14,15 @@ tasks:
     deps: [pnpm]
     sources:
       - package.json
+      - ../package.json
       - ../pnpm-lock.yaml
       - ../pnpm-workspace.yaml
       - ../.npmrc
     cmds:
       - pnpm i
     generates:
-      - node_modules/@feathersjs/adapter-commons/package.json
-      - node_modules/@feathersjs/authentication-client/package.json
-      - node_modules/@feathersjs/authentication-local/package.json
-      - node_modules/@feathersjs/authentication-oauth/package.json
-      - node_modules/@feathersjs/authentication/package.json
-      - node_modules/@feathersjs/cli/package.json
-      - node_modules/@feathersjs/configuration/package.json
-      - node_modules/@feathersjs/errors/package.json
-      - node_modules/@feathersjs/feathers/package.json
-      - node_modules/@feathersjs/knex/package.json
-      - node_modules/@feathersjs/koa/package.json
-      - node_modules/@feathersjs/rest-client/package.json
-      - node_modules/@feathersjs/schema/package.json
-      - node_modules/@feathersjs/socketio/package.json
-      - node_modules/@feathersjs/transport-commons/package.json
-      - node_modules/@feathersjs/typebox/package.json
-      - node_modules/@rp-pedraza/koa-proxy/package.json
-      - node_modules/@types/mocha/package.json
-      - node_modules/@types/node/package.json
-      - node_modules/axios/package.json
-      - node_modules/cross-env/package.json
-      - node_modules/knex/package.json
-      - node_modules/mocha/package.json
-      - node_modules/nodemon/jsconfig.json
-      - node_modules/nodemon/package.json
-      - node_modules/pinia-plugin-persistedstate/package.json
-      - node_modules/prettier/package.json
-      - node_modules/shx/package.json
-      - node_modules/sqlite3/package.json
-      - node_modules/ts-node/package.json
-      - node_modules/ts-node/tsconfig.schema.json
-      - node_modules/ts-node/tsconfig.schemastore-schema.json
-      - node_modules/typescript/package.json
-      - node_modules/winston/package.json
+      - node_modules/@*/*/package.json
+      - node_modules/*/package.json
 
   data:migrate:
     desc: Run database migration
