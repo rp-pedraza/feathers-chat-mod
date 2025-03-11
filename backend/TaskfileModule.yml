@@ -55,6 +55,19 @@ tasks:
       - node_modules/typescript/package.json
       - node_modules/winston/package.json
 
+  data:migrate:
+    desc: Run database migration
+    deps: [prepare]
+    cmds:
+      - pnpm migrate
+
+  data:
+    desc: Make sure database file exists
+    status:
+      - test -f ../data/feathers-chat-mod.sqlite
+    cmds:
+      - task: data:migrate
+
   build:
     desc: Build lib files
     deps: [prepare]
@@ -63,13 +76,13 @@ tasks:
 
   serve:
     desc: Run the backend server
-    deps: [prepare]
+    deps: [prepare, data]
     cmds:
       - pnpm run dev
 
   serve:prod:
     desc: Run the backend server in production mode
-    deps: [prepare, build]
+    deps: [prepare, data, build]
     cmds:
       - task frontend:build
       - pnpm run start
