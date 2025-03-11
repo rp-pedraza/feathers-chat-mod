@@ -14,7 +14,7 @@
   },
   "sqlite": {
     "client": "sqlite3",
-    "connection": "feathers-chat.sqlite",
+    "connection": "../data/feathers-chat-mod.sqlite",
     "useNullAsDefault": true
   },
   "authentication": {
