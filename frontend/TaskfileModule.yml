@@ -69,9 +69,14 @@ tasks:
       - node_modules/vue-tsc/package.json
       - node_modules/vue/package.json
 
+  build-backend:
+    cmds:
+      - task backend:build
+    internal: true
+
   build:
     desc: Build dist files
-    deps: [prepare]
+    deps: [prepare, build-backend]
     sources:
       - src/**/*.ts
       - src/**/*.vue
@@ -85,6 +90,6 @@ tasks:
 
   serve:
     desc: Run frontend server
-    deps: [prepare]
+    deps: [prepare, build-backend]
     cmds:
       - pnpm dev
