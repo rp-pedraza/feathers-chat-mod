@@ -8,3 +8,7 @@ includes:
   backend:
     taskfile: ./backend/TaskfileModule.yml
     dir: ./backend
+
+  docker:
+    taskfile: ./docker/TaskfileModule.yml
+    dir: ./docker

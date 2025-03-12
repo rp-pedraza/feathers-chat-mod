@@ -1,0 +1,11 @@
+.git
+.gitignore
+Taskfile.yml
+TaskfileModule.yml
+dist
+lib
+node_modules
+*.md
+/data
+/docker
+/taskfiles

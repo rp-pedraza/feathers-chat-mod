@@ -16,7 +16,7 @@ tasks:
       - for: { var: DOCKER_BUILD_DEPENDENCIES, as: DEP }
         task: '{{.DEP}}'
     cmds:
-      - docker compose up --detach {{.DOCKER_SERVICE_NAME}}
+      - docker compose up {{.DOCKER_SERVICE_NAME}}
 
   up:build:
     desc: "Create and start {{.DOCKER_SERVICE_NAME}} service while also building images always"
@@ -27,7 +27,7 @@ tasks:
       - for: { var: DOCKER_BUILD_DEPENDENCIES, as: DEP }
         task: '{{.DEP}}'
     cmds:
-      - docker compose up --detach {{.DOCKER_SERVICE_NAME}}
+      - docker compose up --build {{.DOCKER_SERVICE_NAME}}
 
   up:no-build:
     desc: "Create and start {{.DOCKER_SERVICE_NAME}} service but don't build any image"
@@ -36,7 +36,7 @@ tasks:
       - for: { var: DOCKER_UP_DEPENDENCIES, as: DEP }
         task: '{{.DEP}}'
     cmds:
-      - docker compose up --detach {{.DOCKER_SERVICE_NAME}}
+      - docker compose up {{.DOCKER_SERVICE_NAME}}
 
   down:
     desc: Stop and remove {{.DOCKER_SERVICE_NAME}} service

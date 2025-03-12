@@ -1,0 +1,15 @@
+services:
+  feathers-chat-mod:
+    image: rppedraza/feathers-chat-mod
+    container_name: feathers-chat-mod
+    build:
+      context: .
+      additional_contexts:
+        root: ..
+    ports:
+      - "3030:3030"
+    volumes:
+      - feathers-chat-mod-data:/feathers-chat-mod/data
+
+volumes:
+  feathers-chat-mod-data:

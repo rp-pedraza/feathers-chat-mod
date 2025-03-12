@@ -13,6 +13,13 @@ This is a modified version of [feathers-chat](https://github.com/feathersjs/feat
   demonstrating consitent routing and proxying dependening on where the site is accessed and making
   the strategies for deploying the site more flexible.
 
+## Running through Docker
+
+For quick demonstration, this application can be immediately be run through the Docker image
+uploaded in Docker Hub.
+
+    docker run -it --rm -p 3030:3030 rppedraza/feathers-chat-mod:latest
+
 ## Requirements
 
 - [Task](https://taskfile.dev/installation/)
@@ -43,6 +50,6 @@ This time only one terminal is needed.  Run the following command in it:
 
     task backend:serve:prod
 
-## TODO:
+## Building a new docker image and running it
 
-- Add tooling for app's Docker image
+    task docker:up:build
