@@ -46,4 +46,3 @@ This time only one terminal is needed.  Run the following command in it:
 ## TODO:
 
 - Add tooling for app's Docker image
-- Perhaps try to make the app build and run as an artifact
