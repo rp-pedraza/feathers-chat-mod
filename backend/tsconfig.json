@@ -1,20 +1,33 @@
 {
-  "ts-node": {
-    "files": true
-  },
   "compilerOptions": {
-    "target": "es2020",
-    "module": "commonjs",
+    "target": "es2022",
+    "module": "es6",
+    "moduleResolution": "node10",
     "outDir": "./lib",
     "rootDir": "./src",
     "declaration": true,
+    "esModuleInterop": true,
     "strict": true,
-    "esModuleInterop": true
+    "noImplicitAny": true,
+    "noImplicitThis": true,
+    "alwaysStrict": true
   },
-  "include": [
-    "src"
-  ],
-  "exclude": [
-    "test"
-  ]
+  "include": ["src"],
+  "exclude": ["test"]
 }
+
+// Notes:
+//
+// Avoid aliases as they need translation when modules are compiled and
+// externally exported.  Consumer packages would fail to find the target
+// a path that includes an alias component specifies.
+//
+// If they're still wanted maybe use tsc-alias but not tsup as tsup fails
+// to compile the code with client.ts as the entry point.  Tsup fails to
+// ignore functions that aren't needed and fail to compile unless som
+// external dependencies are also included.  Tsup should have a lazy
+// compilation mode.
+//
+// The "module" and "moduleResolution" settings were reverted to es6 and
+// node10 from node16 due to TS2349/TS2351 in
+// @feathersjs/authentication-client@5.0.33 and ajv@8.17.1.

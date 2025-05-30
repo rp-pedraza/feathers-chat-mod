@@ -1,17 +1,21 @@
 {
   "name": "@rp-pedraza/feathers-chat-mod-backend",
-  "description": "A Feathesr chat application",
+  "description": "A Feathers chat application",
   "version": "0.0.0",
   "homepage": "",
   "private": true,
+  "type": "module",
   "keywords": [
     "feathers"
   ],
-  "author": {},
+  "author": {
+    "email": "rp.pedraza@gmil.com",
+    "name": "R.P. Pedraza"
+  },
   "contributors": [],
   "bugs": {},
   "engines": {
-    "node": ">= 18.10.0"
+    "node": ">= 22.0.0"
   },
   "feathers": {
     "language": "ts",
@@ -34,14 +38,18 @@
   ],
   "main": "lib/client",
   "scripts": {
-    "dev": "env NODE_ENV=development nodemon -x ts-node src/index.ts",
     "compile": "shx rm -rf lib/ && tsc",
-    "start": "node lib/",
-    "prettier": "npx prettier \"**/*.ts\" --write",
+    "dev": "env NODE_ENV=development nodemon -w src -x tsx src/index.ts",
+    "eslint": "eslint --fix -- ./src migrations *.ts *.js",
+    "knex": "tsx node_modules/knex/bin/cli.js",
+    "migrate": "tsx node_modules/knex/bin/cli.js migrate:latest",
+    "migrate:down": "tsx node_modules/knex/bin/cli.js migrate:down",
+    "migrate:make": "tsx node_modules/knex/bin/cli.js migrate:make",
+    "migrate:up": "tsx node_modules/knex/bin/cli.js migrate:up",
     "mocha": "cross-env NODE_ENV=test mocha test/ --require ts-node/register --recursive --extension .ts --exit",
-    "test": "cross-env NODE_ENV=test npm run migrate && npm run mocha",
-    "migrate": "knex migrate:latest",
-    "migrate:make": "knex migrate:make"
+    "prettier": "prettier --write -- '*.ts' migrations/ src/",
+    "start": "node --import tsx lib",
+    "test": "cross-env NODE_ENV=test npm run migrate && npm run mocha"
   },
   "dependencies": {
     "@feathersjs/adapter-commons": "^5.0.33",
@@ -58,24 +66,34 @@
     "@feathersjs/socketio": "^5.0.33",
     "@feathersjs/transport-commons": "^5.0.33",
     "@feathersjs/typebox": "^5.0.33",
+    "@file-type/xml": "^0.4.1",
+    "@rp-pedraza/feathers-chat-mod-utils": "workspace:*",
     "@rp-pedraza/koa-proxy": "^1.0.0-alpha.3.0.6",
+    "@sinclair/typebox": "^0.34.33",
+    "file-type": "^20.4.1",
     "knex": "^3.1.0",
+    "lodash-es": "^4.17.21",
+    "node-fetch": "^3.3.2",
     "pinia-plugin-persistedstate": "^4.2.0",
+    "read-chunk": "^5.0.0",
     "sqlite3": "^5.1.7",
+    "tsx": "^4.19.3",
     "winston": "^3.17.0"
   },
   "devDependencies": {
+    "@eslint/js": "^9.25.1",
     "@feathersjs/cli": "^5.0.33",
     "@feathersjs/rest-client": "^5.0.33",
+    "@types/lodash-es": "^4.17.12",
     "@types/mocha": "^10.0.10",
     "@types/node": "^20.17.19",
     "axios": "^1.7.9",
     "cross-env": "^7.0.3",
+    "eslint": "^9.25.1",
+    "globals": "^16.0.0",
     "mocha": "^10.8.2",
     "nodemon": "^3.1.9",
-    "prettier": "^3.5.2",
     "shx": "^0.3.4",
-    "ts-node": "^10.9.2",
-    "typescript": "^5.7.3"
+    "typescript-eslint": "^8.31.1"
   }
 }

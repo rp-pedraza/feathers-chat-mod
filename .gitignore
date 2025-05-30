@@ -3,3 +3,7 @@ node_modules/
 /package.json
 .task
 dist
+/data/*.sqlite
+tsconfig.tsbuildinfo
+*.snippet*
+*.temp

@@ -1,18 +1,23 @@
 // For more information about this file see https://dove.feathersjs.com/guides/cli/log-error.html
-import type { HookContext, NextFunction } from '../declarations'
-import { logger } from '../logger'
+import { hasProperty } from "@rp-pedraza/feathers-chat-mod-utils";
+import type { HookContext, NextFunction } from "../declarations.js";
+import { logger } from "../logger.js";
 
-export const logError = async (context: HookContext, next: NextFunction) => {
+const logError = async (context: HookContext, next: NextFunction) => {
   try {
-    await next()
-  } catch (error: any) {
-    logger.error(error.stack)
-
-    // Log validation errors
-    if (error.data) {
-      logger.error('Data: %O', error.data)
+    await next();
+  } catch (error: unknown) {
+    if (hasProperty(error, "stack")) {
+      logger.error(error.stack);
     }
 
-    throw error
+    if (hasProperty(error, "data")) {
+      // Log validation errors
+      logger.error("Data: %O", error.data);
+    }
+
+    throw error;
   }
-}
+};
+
+export default logError;

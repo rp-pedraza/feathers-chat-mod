@@ -1,91 +1,105 @@
 <script setup lang="ts">
-import client from '@/client'
-import login from '@/login'
-import router from '@/router'
-import { useLoginErrorsStore } from '@/stores/login-errors'
-import { defineModel, onMounted } from 'vue'
-import { userValidator, type UserData } from '@rp-pedraza/feathers-chat-mod-backend'
+import { validateEmail, validateUsername } from "@rp-pedraza/feathers-chat-mod-backend";
+import authenticate, { type Credentials } from "../authenticate";
+import setupErrorHandling from "../common/setup-error-handling";
+import router from "../router";
 
-const loginErrors = useLoginErrorsStore()
-const email = defineModel<string>('email')
-const password = defineModel<string>('password')
+const usernameOrEmail = defineModel<string>("usernameOrEmail");
+const password = defineModel<string>("password");
+const { addError } = setupErrorHandling("login", { discardedErrorsSelector: "chat" });
 
-const signup = async () => {
-  const credentials = { email: email.value, password: password.value }
+const loginWithUsernameOrEmail = async () => {
+  const ue = usernameOrEmail.value;
+  const pw = password.value;
+  let credentials: Credentials;
 
-  try {
-    await userValidator(credentials)
-  } catch (e: unknown) {
-    loginErrors.add(e, 'Invalid credentials: ')
+  if (!ue) {
+    addError("Username or email not specified.");
+    return;
+  } else if (!pw) {
+    addError("Password not specified.");
+    return;
+  } else if (validateUsername(ue)) {
+    credentials = { username: ue, password: pw };
+  } else if (validateEmail(ue)) {
+    credentials = { email: ue, password: pw };
+  } else {
+    addError("Invalid username or email specified.");
+    return;
   }
 
-  await client.service('users').create(credentials as UserData)
-  await login(client, credentials as UserData)
-}
+  try {
+    await authenticate({ credentials });
+  } catch (e: unknown) {
+    addError(e, "Login failed: ");
+    return;
+  }
+
+  router.push("/chat"); // Don't await otherwise URI won't be updated
+};
+
+const loginWithGoogle = () => {
+  window.location.href = "/oauth/google";
+};
 
 const loginWithGitHub = () => {
-  window.location.href = '/oauth/github'
-}
+  window.location.href = "/oauth/github";
+};
 
-onMounted(async () => {
-  try {
-    await login(client)
-    router.push('/chat')
-  } catch (error: unknown) {
-    loginErrors.add(error)
-  }
-})
+const goToSignupPage = () => {
+  router.push("/signup"); // Don't await otherwise URI won't be updated
+};
 </script>
 
 <template>
-  <div class="login flex min-h-screen bg-neutral justify-center items-center">
-    <div class="card w-full max-w-sm bg-base-100 px-4 py-8 shadow-xl">
+  <div id="login" class="flex min-h-screen bg-neutral justify-center items-center">
+    <div class="card w-full max-w-sm bg-base-100 px-4 py-2 my-4 shadow-xl">
       <div class="px-4">
-        <i alt="" class="h-32 w-32 block mx-auto i-logos-feathersjs invert"></i>
-        <h1 class="text-5xl font-bold text-center my-5 bg-clip-text bg-gradient-to-br">
-          Feathers Chat
-        </h1>
+        <h1 class="text-3xl font-bold text-center my-4 bg-clip-text bg-gradient-to-br">Login</h1>
       </div>
       <form class="card-body pt-2">
-        <div
-          v-for="error in loginErrors.takeAll()"
-          class="alert alert-error justify-start"
-          :key="error.id"
-        >
-          <i class="i-feather-alert-triangle"></i>
-          <span class="flex-grow" v-text="error.value.message"></span>
-        </div>
-        <div class="form-control">
-          <label for="email" class="label"><span class="label-text">Email</span></label>
+        <fieldset class="fieldset">
+          <legend for="username-or-email" class="fieldset-legend">Username/Email</legend>
           <input
             type="text"
-            name="email"
-            placeholder="enter email"
+            name="username-or-email"
+            placeholder="enter username or email"
             class="input input-bordered"
-            v-model="email"
+            v-model="usernameOrEmail"
+            required
           />
-        </div>
-        <div class="form-control mt-0">
-          <label for="password" class="label"><span class="label-text">Password</span></label>
+        </fieldset>
+        <fieldset class="fieldset mt-0">
+          <legend for="password" class="fieldset-legend">Password</legend>
           <input
             type="password"
             name="password"
             placeholder="enter password"
             class="input input-bordered"
             v-model="password"
+            required
           />
-        </div>
-        <div class="form-control mt-6">
-          <button id="login" type="button" class="btn" @click="login(client)">Login</button>
-        </div>
-        <div class="form-control mt-6">
-          <button id="signup" type="button" class="btn" @click="signup()">Signup</button>
-        </div>
-        <div class="form-control mt-6">
-          <button id="login-with-github" type="button" class="btn" @click="loginWithGitHub()">
+        </fieldset>
+        <fieldset class="fieldset mt-4">
+          <button id="login" type="button" class="btn" @click="loginWithUsernameOrEmail">
+            Login
+          </button>
+        </fieldset>
+        <fieldset class="fieldset">
+          <button id="login-with-google" type="button" class="btn" @click="loginWithGoogle">
+            Login with Google
+          </button>
+        </fieldset>
+        <fieldset class="fieldset">
+          <button id="login-with-github" type="button" class="btn" @click="loginWithGitHub">
             Login with GitHub
           </button>
-        </div>
+        </fieldset>
+        <fieldset class="fieldset">
+          <button id="signup" type="button" class="btn" @click="goToSignupPage">
+            Go to signup page
+          </button>
+        </fieldset>
       </form>
     </div>
   </div>

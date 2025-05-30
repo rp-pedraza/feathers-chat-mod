@@ -1,0 +1,31 @@
+{
+  "name": "@rp-pedraza/feathers-chat-mod-utils",
+  "version": "0.0.0",
+  "description": "Shared utilities",
+  "author": "R.P. Pedraza <rp.pedraza@gmail.com>",
+  "license": "MIT",
+  "type": "module",
+  "main": "./lib/index.js",
+  "types": "./lib/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./lib/index.js",
+      "types": "./lib/index.d.ts"
+    }
+  },
+  "files": [
+    "lib"
+  ],
+  "scripts": {
+    "build": "tsc --build",
+    "clean": "rm -rf lib",
+    "eslint": "eslint --fix -- src/ *.js",
+    "prettier": "prettier --write -- src/"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.25.1",
+    "eslint": "^9.25.1",
+    "globals": "^16.0.0",
+    "typescript-eslint": "^8.31.1"
+  }
+}

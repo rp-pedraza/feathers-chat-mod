@@ -3,8 +3,8 @@
   "port": 3030,
   "public": "../frontend/dist",
   "origins": [
-    "http://localhost:3030",
     "http://localhost:3000",
+    "http://localhost:3030",
     "http://localhost:5173",
     "http://localhost:5174"
   ],
@@ -23,7 +23,8 @@
     "secret": "VL59H5Mz4td/nR/oxTumJrwCKOgeltEZ",
     "authStrategies": [
       "jwt",
-      "local"
+      "email",
+      "username"
     ],
     "jwtOptions": {
       "header": {
@@ -33,14 +34,25 @@
       "algorithm": "HS256",
       "expiresIn": "1d"
     },
-    "local": {
+    "email": {
       "usernameField": "email",
       "passwordField": "password"
     },
+    "username": {
+      "usernameField": "username",
+      "passwordField": "password"
+    },
     "oauth": {
+      "google": {
+        "key": "492196907822-3obbjf93n4m9cu814ibjop6atp3dlj5u.apps.googleusercontent.com",
+        "secret": "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",
+        "scope": ["openid", "email"],
+        "nonce": true
+      },
       "github": {
         "key": "Ov23li3MgdBTKfBpNg8S",
-        "secret": "dec632fe733d8466d55c096d1b89ce78e918efa3"
+        "secret": "dec632fe733d8466d55c096d1b89ce78e918efa3",
+        "scope": ["user:email"]
       }
     }
   },

@@ -1,29 +1,28 @@
-// For more information about this file see https://dove.feathersjs.com/guides/cli/service.shared.html
-import type { Params } from '@feathersjs/feathers'
-import type { ClientApplication } from '../../client'
-import type { Message, MessageData, MessagePatch, MessageQuery, MessageService } from './messages.class'
+import type { ClientApplication } from "../../client.js";
+import { MessageService } from "./messages.class.js";
+import type { Message, MessageData, MessagePatch, MessageQuery } from "./messages.schema.js";
 
-export type { Message, MessageData, MessagePatch, MessageQuery }
+export type { Message, MessageData, MessagePatch, MessageQuery };
 
-export { messageValidator } from './messages.schema'
+export { messageDataValidator, messageValidator } from "./messages.schema.js";
 
-export type MessageClientService = Pick<MessageService<Params<MessageQuery>>, (typeof messageMethods)[number]>
+export type MessageClientService = Pick<MessageService, (typeof messageMethods)[number]>;
 
-export const messagePath = 'messages'
+export const messagePath = "messages";
 
-export const messageMethods = ['find', 'get', 'create', 'patch', 'remove'] as const
+export const messageMethods = ["find", "get", "create", "patch", "remove"] as const;
 
 export const messageClient = (client: ClientApplication) => {
-  const connection = client.get('connection')
+  const connection = client.get("connection");
 
   client.use(messagePath, connection.service(messagePath), {
     methods: messageMethods
-  })
-}
+  });
+};
 
 // Add this service to the client service type index
-declare module '../../client' {
+declare module "../../client.js" {
   interface ServiceTypes {
-    [messagePath]: MessageClientService
+    [messagePath]: MessageClientService;
   }
 }

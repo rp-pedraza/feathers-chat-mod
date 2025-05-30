@@ -1,0 +1,26 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    // Allows the CLI version of prettier to be run as a task
+    // This was added because current version of esbenp.prettier-vscode doesn't
+    // seem to support plugins nor does it wrap long line.
+    {
+      "label": "Format with CLI Prettier",
+      "type": "shell",
+      "command": "pnpm exec prettier --write -- ${file}",
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "problemMatcher": [],
+      "presentation": {
+        "echo": true,
+        "reveal": "silent",
+        "focus": false
+      },
+      "runOptions": {
+        "runOn": "default"
+      }
+    }
+  ]
+}

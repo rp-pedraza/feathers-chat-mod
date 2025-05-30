@@ -1,26 +1,25 @@
 // For more information about this file see https://dove.feathersjs.com/guides/cli/service.html
-import { authenticate } from '@feathersjs/authentication'
-
-import { hooks as schemaHooks } from '@feathersjs/schema'
-
+import { authenticate } from "@feathersjs/authentication";
+import { hooks as schemaHooks } from "@feathersjs/schema";
+import type { Application } from "../../declarations.js";
+import checkAndIncreaseVersion from "../../hooks/check-and-increase-version.js";
+import logRuntime from "../../hooks/log-runtime.js";
+import requireUsername from "../../hooks/require-username.js";
+import { MessageService, getOptions } from "./messages.class.js";
 import {
-  messageDataValidator,
-  messagePatchValidator,
-  messageQueryValidator,
-  messageResolver,
-  messageExternalResolver,
   messageDataResolver,
+  messageDataValidator,
+  messageExternalResolver,
   messagePatchResolver,
-  messageQueryResolver
-} from './messages.schema'
+  messagePatchValidator,
+  messageQueryResolver,
+  messageQueryValidator,
+  messageResolver
+} from "./messages.schema.js";
+import { messageMethods, messagePath } from "./messages.shared.js";
 
-import type { Application } from '../../declarations'
-import { MessageService, getOptions } from './messages.class'
-import { messagePath, messageMethods } from './messages.shared'
-import { logRuntime } from '../../hooks/log-runtime'
-
-export * from './messages.class'
-export * from './messages.schema'
+export * from "./messages.class.js";
+export * from "./messages.schema.js";
 
 // A configure function that registers the service and its hooks via `app.configure`
 export const message = (app: Application) => {
@@ -30,13 +29,14 @@ export const message = (app: Application) => {
     methods: messageMethods,
     // You can add additional custom events to be sent to clients here
     events: []
-  })
+  });
   // Initialize hooks
   app.service(messagePath).hooks({
     around: {
       all: [
         logRuntime,
-        authenticate('jwt'),
+        authenticate("jwt"),
+        requireUsername,
         schemaHooks.resolveExternal(messageExternalResolver),
         schemaHooks.resolveResult(messageResolver)
       ]
@@ -44,15 +44,19 @@ export const message = (app: Application) => {
     before: {
       all: [
         schemaHooks.validateQuery(messageQueryValidator),
-        schemaHooks.resolveQuery(messageQueryResolver),
-        async (context) => {
-          console.log('params.user is', context.params.user)
-        }
+        schemaHooks.resolveQuery(messageQueryResolver)
       ],
       find: [],
       get: [],
-      create: [schemaHooks.validateData(messageDataValidator), schemaHooks.resolveData(messageDataResolver)],
-      patch: [schemaHooks.validateData(messagePatchValidator), schemaHooks.resolveData(messagePatchResolver)],
+      create: [
+        schemaHooks.validateData(messageDataValidator),
+        schemaHooks.resolveData(messageDataResolver)
+      ],
+      patch: [
+        checkAndIncreaseVersion,
+        schemaHooks.validateData(messagePatchValidator),
+        schemaHooks.resolveData(messagePatchResolver)
+      ],
       remove: []
     },
     after: {
@@ -61,12 +65,12 @@ export const message = (app: Application) => {
     error: {
       all: []
     }
-  })
-}
+  });
+};
 
 // Add this service to the service type index
-declare module '../../declarations' {
+declare module "../../declarations.js" {
   interface ServiceTypes {
-    [messagePath]: MessageService
+    [messagePath]: MessageService;
   }
 }

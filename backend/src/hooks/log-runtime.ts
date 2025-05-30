@@ -1,11 +1,13 @@
-import type { HookContext, NextFunction } from '../declarations'
-import { logger } from '../logger'
+import type { HookContext, NextFunction } from "../declarations.js";
+import { logger } from "../logger.js";
 
-export const logRuntime = async (context: HookContext, next: NextFunction) => {
-  const startTime = Date.now()
+const logRuntime = async (context: HookContext, next: NextFunction) => {
+  const startTime = Date.now();
   // Run everything else (other hooks and service call)
-  await next()
+  await next();
 
-  const duration = Date.now() - startTime
-  logger.info(`Calling ${context.method} on ${context.path} took ${duration}ms`)
-}
+  const duration = Date.now() - startTime;
+  logger.info(`Calling ${context.method} on ${context.path} took ${duration}ms`);
+};
+
+export default logRuntime;

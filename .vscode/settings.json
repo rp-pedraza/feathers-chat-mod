@@ -1,0 +1,49 @@
+{
+  // Explicitly tell VS Code to use the workspace version of TypeScript
+  // The overrides.typescript setting in pnpm-workspace.yaml ensures all
+  // versions are the same
+  "typescript.tsdk": "./node_modules/typescript/lib",
+
+  // Ensure automatic detection of TypeScript projects (tsconfig.json files) in
+  // the workspace
+  "typescript.tsc.autoDetect": "on",
+
+  // Reinforce treatment of .ts files as TypeScript and .vue files as Vue
+  "files.associations": {
+    "*.ts": "typescript",
+    "*.vue": "vue"
+  },
+
+  // File nesting configurations
+  "explorer.fileNesting.enabled": true,
+  "explorer.fileNesting.patterns": {
+    "tsconfig.json": "tsconfig.*.json, env.d.ts",
+    "vite.config.*": "jsconfig*, vitest.config.*, cypress.config.*, playwright.config.*",
+    "package.json": "package-lock.json, pnpm*, .yarnrc*, yarn*, .eslint*, eslint*, .prettier*, prettier*, .editorconfig"
+  },
+
+  // Formatting and linting
+  "editor.codeActionsOnSave": { "source.fixAll": "explicit" },
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
+  "prettier.requireConfig": true,
+
+  // Enforce adding '.js' for Node.js node16 module resolution in backend
+  "[javascript][backend/**/*]": {
+    "javascript.preferences.importModuleSpecifierEnding": "js"
+  },
+  "[typescript][backend/**/*]": {
+    "typescript.preferences.importModuleSpecifierEnding": "js"
+  },
+
+  // Keep extensions minimal in frontend; bundler allows them to be optional
+  "[javascript][frontend/**/*]": {
+    "javascript.preferences.importModuleSpecifierEnding": "minimal"
+  },
+  "[typescript][frontend/**/*]": {
+    "typescript.preferences.importModuleSpecifierEnding": "minimal"
+  },
+
+  // Avoid parentheses around sole arrow function parameters
+  "prettier.arrowParens": "avoid"
+}

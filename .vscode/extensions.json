@@ -1,0 +1,11 @@
+{
+  "recommendations": [
+    "Vue.volar",                        // Vue language support for frontend
+    "dbaeumer.vscode-eslint",           // ESLint for linting
+    "EditorConfig.EditorConfig",        // EditorConfig support
+    "esbenp.prettier-vscode",           // Prettier for formatting
+    "ms-vscode.vscode-typescript-next", // Enhanced TypeScript support
+    "eslint-disable-snippets",          // Simple snippets to disable eslint rules
+    "actboy168.tasks"                   // Load VSCode Tasks into Status Bar
+  ]
+}

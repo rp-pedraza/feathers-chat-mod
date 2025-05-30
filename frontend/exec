@@ -1,0 +1,17 @@
+..                                       |  WARN  `node_modules` is present. Lockfile only installation will make it out-of-date
+..                                       | Progress: resolved 1, reused 0, downloaded 0, added 0
+..                                       | Progress: resolved 23, reused 0, downloaded 0, added 0
+..                                       | Progress: resolved 67, reused 0, downloaded 0, added 0
+..                                       | Progress: resolved 245, reused 0, downloaded 0, added 0
+..                                       | Progress: resolved 500, reused 0, downloaded 0, added 0
+..                                       | Progress: resolved 745, reused 0, downloaded 0, added 0
+..                                       | Progress: resolved 932, reused 0, downloaded 0, added 0
+ WARN  13 deprecated subdependencies found: @npmcli/move-file@1.1.2, are-we-there-yet@3.0.1, gauge@4.0.4, glob@7.2.3, glob@8.1.0, har-validator@5.1.5, inflight@1.0.6, node-domexception@1.0.0, npmlog@6.0.2, request-promise-native@1.0.9, request@2.88.2, rimraf@3.0.2, uuid@3.4.0
+..                                       | Progress: resolved 1054, reused 0, downloaded 0, added 0
+..                                       | Progress: resolved 1054, reused 0, downloaded 0, added 0, done
+
+devDependencies:
++ prettier ^3.5.3
+
+..                                       |   +3   -3 +-
+Done in 13.1s using pnpm v10.10.0

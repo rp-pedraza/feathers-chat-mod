@@ -1,49 +1,57 @@
-import vue from '@vitejs/plugin-vue'
-import { defineConfig, loadEnv } from 'vite'
-import { existsSync } from 'node:fs'
-import { fileURLToPath, URL } from 'node:url'
-import { nodePolyfills } from 'vite-plugin-node-polyfills'
+import tailwindcss from "@tailwindcss/vite";
+import vue from "@vitejs/plugin-vue";
+import { defineConfig, loadEnv } from "vite";
+import { nodePolyfills } from "vite-plugin-node-polyfills";
 
 export default defineConfig(({ mode }) => {
   const env = {
-    CHAT_APP_BACKEND_SERVER_URI: 'http://localhost:3030',
-  }
+    CHAT_APP_BACKEND_SERVER_URI: "http://localhost:3030"
+  };
 
-  Object.assign(env, loadEnv(mode, process.cwd(), 'CHAT_APP_'))
+  Object.assign(env, loadEnv(mode, process.cwd(), "CHAT_APP_"));
 
   const config = {
     plugins: [
       vue(),
       nodePolyfills({
-        include: ['crypto', 'stream', 'util', 'vm'],
+        include: ["crypto", "stream", "util", "vm"]
       }),
+      tailwindcss()
     ],
-    resolve: {
-      preserveSymlinks: true,
-      alias: {
-        '@': fileURLToPath(new URL('./src', import.meta.url)),
-      },
-    },
-  }
+    build: {
+      rollupOptions: {
+        output: {
+          manualChunks(id: string) {
+            const base = id.match(/node_modules\/((?:@[^/.]+\/)?[^/.]+[^/]*)/)?.[1];
 
-  if (mode !== 'production') {
+            if (base && !base.match(/^@rp-pedraza\//)) {
+              // TODO: Maybe divide to smaller chunks
+              return "dependencies";
+            }
+          }
+        }
+      }
+    }
+  };
+
+  if (mode !== "production") {
     Object.assign(config, {
       server: {
         proxy: {
-          '/oauth': {
+          "/oauth": {
             target: env.CHAT_APP_BACKEND_SERVER_URI,
-            changeOrigin: true,
-          },
-        },
-      },
-    })
+            changeOrigin: true
+          }
+        }
+      }
+    });
   }
 
   Object.assign(config, {
     define: {
-      __BACKEND_SERVER_URI__: JSON.stringify(env.CHAT_APP_BACKEND_SERVER_URI),
-    },
-  })
+      __BACKEND_SERVER_URI__: JSON.stringify(env.CHAT_APP_BACKEND_SERVER_URI)
+    }
+  });
 
-  return config
-})
+  return config;
+});

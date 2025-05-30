@@ -9,26 +9,28 @@ tasks:
       - sh: test -n ${PNPM_HOME}
         msg: PNPM_HOME environment variable must be set
 
-  prepare:
-    desc: Install node modules
-    deps: [pnpm]
+  pnpm-i:
+    internal: true
     sources:
       - package.json
       - ../package.json
       - ../pnpm-lock.yaml
       - ../pnpm-workspace.yaml
       - ../.npmrc
+      - ../utils/lib/**/*.js
+      - ../utils/lib/**/*.d.ts
     cmds:
       - pnpm i
     generates:
       - node_modules/@*/*/package.json
       - node_modules/*/package.json
 
-  data:migrate:
-    desc: Run database migration
-    deps: [prepare]
+  prepare:
+    desc: Install node modules
+    deps: [pnpm]
     cmds:
-      - pnpm migrate
+      - task utils:build
+      - pnpm i
 
   data:
     desc: Make sure database file exists
@@ -37,15 +39,36 @@ tasks:
     cmds:
       - task: data:migrate
 
+  data:migrate:
+    desc: Run database migration
+    deps: [prepare]
+    cmds:
+      - pnpm run migrate
+
+  data:migrate:up:
+    desc: Run the next database migration step
+    deps: [prepare]
+    cmds:
+      - pnpm run migrate:up
+
+  data:migrate:down:
+    desc: Undo last database migration step
+    deps: [prepare]
+    cmds:
+      - pnpm run migrate:down
+
   build:
     desc: Build lib files
     deps: [prepare]
     cmds:
       - pnpm run compile
     sources:
+      - package.json
+      - tsconfig.json
       - src/**/*.ts
     generates:
       - lib/**/*.js
+      - lib/**/*.d.ts
 
   serve:
     desc: Run the backend server
@@ -59,3 +82,16 @@ tasks:
     cmds:
       - task frontend:build
       - pnpm run start
+
+  eslint:
+    desc: "Runs eslint"
+    cmds:
+      - task utils:eslint
+      - task utils:build
+      - task: prepare
+      - pnpm run eslint
+
+  prettier:
+    desc: "Runs prettier"
+    cmds:
+      - pnpm run prettier

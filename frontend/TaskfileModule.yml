@@ -9,9 +9,32 @@ tasks:
       - sh: test -n ${PNPM_HOME}
         msg: PNPM_HOME environment variable must be set
 
-  prepare:
-    desc: Install node modules
+  pnpm-i:
     deps: [pnpm]
+    run: once
+    cmds:
+      - pnpm i
+    internal: true
+
+  inject-backend-package:
+    sources:
+      - ../backend/lib/**/*.js
+      - ../backend/lib/**/*.d.ts
+    cmds:
+      - task: pnpm-i
+    generates:
+      - node_modules/@rp-pedraza/feathers-chat-mod-backend/lib/**/*.js
+      - node_modules/@rp-pedraza/feathers-chat-mod-backend/lib/**/*.d.ts
+    internal: true
+
+  inject-backend-package-if-needed:
+    cmds:
+      - task: inject-backend-package
+    status:
+      - sh -c "! grep -qe '^inject-workspace-packages *= *true' ../.npmrc >/dev/null 2>&1"
+    internal: true
+
+  install-node-modules:
     sources:
       - package.json
       - ../package.json
@@ -19,32 +42,50 @@ tasks:
       - ../pnpm-workspace.yaml
       - ../.npmrc
     cmds:
-      - pnpm i
+      - task: pnpm-i
     generates:
       - node_modules/@*/*/package.json
       - node_modules/*/package.json
+    internal: true
 
-  build-backend:
+  prepare:
+    desc: Build backend and install node modules
     cmds:
       - task backend:build
-    internal: true
+      - task utils:build
+      - task: inject-backend-package-if-needed
+      - task: install-node-modules
 
   build:
     desc: Build dist files
-    deps: [prepare, build-backend]
+    deps: [prepare]
     sources:
+      - package.json
+      - tsconfig.*.json
+      - vite.config.ts
       - src/**/*.ts
       - src/**/*.vue
       - ./index.html
     cmds:
       - pnpm run build
     generates:
-      - dist/index.html
-      - dist/assets/*.*
-      - dist/favicon.ico
+      - dist/**/*.*
 
   serve:
     desc: Run frontend server
-    deps: [prepare, build-backend]
+    deps: [prepare]
     cmds:
       - pnpm dev
+
+  eslint:
+    desc: "Runs eslint"
+    cmds:
+      - task utils:eslint
+      - task backend:eslint
+      - task: prepare
+      - pnpm run eslint
+
+  prettier:
+    desc: "Runs prettier"
+    cmds:
+      - pnpm run prettier

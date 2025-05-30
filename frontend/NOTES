@@ -1,3 +1,0 @@
-- vite-plugin-node-polyfills were added to fix issues like
-  "Module "stream" has been externalized for browser compatibility."
-- 

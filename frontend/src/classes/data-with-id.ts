@@ -1,22 +1,14 @@
 export default class DataWithID<T> {
-  _id: number
-  _value: T
+  id: number;
+  value: T;
 
-  static generateId: () => number = (() => {
-    let counter: number = 0
-    return () => ++counter
-  })()
+  static generateId: (suggestedId: number) => number = (() => {
+    let counter: number = 0;
+    return (suggestedId: number) => (counter = suggestedId > counter ? suggestedId : counter + 1);
+  })();
 
-  constructor(value: T) {
-    this._id = DataWithID.generateId()
-    this._value = value
-  }
-
-  get id(): number {
-    return this._id
-  }
-
-  get value(): T {
-    return this._value
+  constructor(value: T, suggestedId?: number) {
+    this.id = DataWithID.generateId(suggestedId ?? 0);
+    this.value = value;
   }
 }

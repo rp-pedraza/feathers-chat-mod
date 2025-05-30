@@ -1,10 +1,10 @@
-import { message } from './messages/messages'
-import { user } from './users/users'
-// For more information about this file see https://dove.feathersjs.com/guides/cli/application.html#configure-functions
-import type { Application } from '../declarations'
+import type { Application } from "../declarations.js";
+import { localAvatar } from "./local-avatars/local-avatars.js";
+import { message } from "./messages/messages.js";
+import { user } from "./users/users.js";
 
 export const services = (app: Application) => {
-  app.configure(message)
-  app.configure(user)
-  // All services will be registered here
-}
+  app.configure(message);
+  app.configure(user);
+  app.configure(localAvatar);
+};

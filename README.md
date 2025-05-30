@@ -12,6 +12,9 @@ This is a modified version of [feathers-chat](https://github.com/feathersjs/feat
 - Site can be accessed through the frontend service port (5137) or the backend (3030) thus
   demonstrating consitent routing and proxying dependening on where the site is accessed and making
   the strategies for deploying the site more flexible.
+- Username and avatar configuration pages
+- Upgraded DaisyUI to 5.0.32 nad Tailwind CSS to 4.1.5
+- Frontend now validates its own data as well
 
 ## Running through Docker
 
