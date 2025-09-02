@@ -5,7 +5,7 @@ This is a modified version of [feathers-chat](https://github.com/feathersjs/feat
 ## Changes
 
 - Simplified to two parts: the frontend and the backend
-- The frontent was based on the static files stored on the public directory,
+- The frontent was based on the static files stored in the public directory,
   fully converted to a new [Vue 3](https://vuejs.org/) app that was initialized from scratch.
 - The backend was the feathers-chat-ts folder renamed to `backend`.
 - Both frontend and backend can be run in production or development mode
@@ -13,8 +13,10 @@ This is a modified version of [feathers-chat](https://github.com/feathersjs/feat
   demonstrating consitent routing and proxying dependening on where the site is accessed and making
   the strategies for deploying the site more flexible.
 - Username and avatar configuration pages
-- Upgraded DaisyUI to 5.0.32 nad Tailwind CSS to 4.1.5
+- Upgraded DaisyUI to 5.0.32 and Tailwind CSS to 4.1.5
 - Frontend now validates its own data as well
+- Utilizes [Task](https://taskfile.dev/) making execution of tasks easier and consistent all
+  throughout the project
 
 ## Running through Docker
 
@@ -44,8 +46,8 @@ Open two terminals and run the following commands separately:
     task frontend:serve
     task backend:serve
 
-After both serves run launched successfully, the site can be visited through http://localhost:3030 (backend) or
-http://localhost:5137 (frontend).
+After both servers are launched successfully, the site can be visited through
+http://localhost:3030 (backend) or http://localhost:5137 (frontend).
 
 ## Running the services in "production" mode
 
